@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('projetonode:server');
+var debug = require('debug')('projetob1:server');
 var http = require('http');
 
 /**
