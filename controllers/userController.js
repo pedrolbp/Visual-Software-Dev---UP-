@@ -8,6 +8,9 @@ class UserController{
         //processar a request
         const {email, data_nasc, password} = req.body;
         try{
+            if(password.length <= 3){
+                res.status(400).json({ error: 'A senha não pode ter menos 3 ou menos caracteres!!!' })
+            }
             const newUser = await this.userService.create(email, data_nasc, password);
             res.status(200).json(newUser);
         }

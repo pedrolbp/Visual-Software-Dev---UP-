@@ -7,9 +7,19 @@ class CartItemController {
 
     // Método para criar um novo item no carrinho
     async createCartItem(req, res) {
-        const {cartId, productId, quantity, totalPrice } = req.body;
+        const {cartId, productId, quantity} = req.body;
         try {
+            if(quantity < 0){
+                res.status(400).json({ error: 'A quantidade não pode ser menor que 0!' })
+            }
+            const product = await this.cartItemService.findProductById(productId)
+            if(!product){
+                res.status(404).json({ error: 'Produto não encontrado' })
+            }
+            const totalPrice = product.price * quantity
+            
             const newCartItem = await this.cartItemService.create(cartId, productId, quantity, totalPrice);
+            
             if (newCartItem) {
                 res.status(201).json(newCartItem); 
             } else {
@@ -56,6 +66,9 @@ class CartItemController {
         const { id } = req.params;
         const updatedData = req.body;
         try {
+            if(updatedData.quantity < 0){
+                res.status(400).json({ error: 'A quantidade não pode ser menor que 0!' })
+            }
             const updatedCartItem = await this.cartItemService.update(id, updatedData);
             if (updatedCartItem) {
                 res.status(200).json(updatedCartItem);

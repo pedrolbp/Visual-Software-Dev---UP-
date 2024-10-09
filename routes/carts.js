@@ -9,7 +9,7 @@ const CartController = require('../controllers/cartController');
 const CartItemController = require('../controllers/cartItemController');
 
 const cartService = new CartService(db.Cart);
-const cartItemService = new CartItemService(db.CartItem);
+const cartItemService = new CartItemService(db.CartItem, db.Product);
 const cartController = new CartController(cartService);
 const cartItemController = new CartItemController(cartItemService);
 

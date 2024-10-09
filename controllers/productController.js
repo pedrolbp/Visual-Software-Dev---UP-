@@ -9,6 +9,12 @@ class ProductController {
     async createProduct(req, res) {
         const { name, description, price, stock } = req.body; 
         try {
+            if(price < 0){
+                res.status(400).json({ error: 'O preço não pode ser menor que 0!' })
+            }
+            if(stock < 0){
+                res.status(400).json({ error: 'O estoque não pode ser menor que 0!' })
+            }
             const newProduct = await this.productService.create(name, description, price, stock);
             res.status(200).json(newProduct);
         } catch (error) {
@@ -49,6 +55,12 @@ class ProductController {
 
     async updateProduct(req, res){
         const { id } = req.params;
+        if(req.body.price < 0){
+            res.status(400).json({ error: 'O preço não pode ser menor que 0!' })
+        }
+        if(req.body.stock < 0){
+            res.status(400).json({ error: 'O estoque não pode ser menor que 0!' })
+        }
         try {
             const product = await this.productService.findById(id);
             if (product) {

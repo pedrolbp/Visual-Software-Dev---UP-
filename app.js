@@ -37,6 +37,12 @@ async function applyDataStructure(){
     await db.sequelize.sync({alter: true});
 }
 
+db.sequelize.sync({ alter: true }).then(() => {
+  console.log('Banco de dados sincronizado');
+}).catch((err) => {
+  console.error('Erro ao sincronizar o banco de dados:', err);
+});
+
 // applyDataStructure();
 // if (process.env.NODE_ENV !== 'production') {
 //     sequelize.sync({ force: true }) // use 'force: true' para recriar as tabelas a cada inicialização (útil em dev)

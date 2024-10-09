@@ -2,8 +2,9 @@
 const db = require('../models');
 
 class CartItemService {
-    constructor(CartItemModel) {
+    constructor(CartItemModel, ProductModel) {
         this.CartItem = CartItemModel; 
+        this.Product = ProductModel;
     }
 
     // Método para criar um novo item no carrinho
@@ -64,6 +65,14 @@ class CartItemService {
             return deleted ? true : false;
         } catch (error) {
             throw error;
+        }
+    }
+    async findProductById(id){
+        try {
+            const product = await this.Product.findByPk(id) 
+            return product ? product : null
+        } catch (error) {
+            throw error
         }
     }
 }

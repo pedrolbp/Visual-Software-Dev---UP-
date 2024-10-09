@@ -31,6 +31,7 @@ class CartController {
                 res.status(404).json({ error: 'Nenhum carrinho encontrado' });
             }
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: 'Ocorreu um erro ao buscar os carrinhos' });
         }
     }

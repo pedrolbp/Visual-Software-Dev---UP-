@@ -1,16 +1,31 @@
-// ./controllers/paymentController.js
 class PaymentController {
-    constructor(PaymentService) {
+    constructor(PaymentService, CartService, CartItemService) {
         this.paymentService = PaymentService;
+        this.cartService = CartService;
+        this.cartItemService = CartItemService;
     }
 
     async pay(req, res, metodoPagamento) {
-        const { userId, valorTotal } = req.body;
+        const { userId } = req.body;
         try {
+            // Buscar o carrinho associado ao usuário
+            const cart = await this.cartService.findCartByUserId(userId);
+            if (!cart) {
+                return res.status(404).json({ error: 'Carrinho não encontrado para o usuário' });
+            }
+
+            const items = await this.cartItemService.findAll(cart.dataValues.id)
+            const valorTotal = items.reduce((acc, curr) => {
+                return acc + parseFloat(curr.totalPrice)
+            }, 0)
+
+            console.log(valorTotal)
+
+            // Processar o pagamento usando o valor total do carrinho
             const payment = await this.paymentService.processPayment(userId, valorTotal, metodoPagamento);
             res.status(201).json({ message: 'Pagamento processado', payment });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(500).json({ error: 'Erro ao processar pagamento' });
         }
     }
